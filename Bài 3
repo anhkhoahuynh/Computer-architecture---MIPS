@@ -1,0 +1,58 @@
+#Bài 3: Nhập vào một ký tự hoa, in ra ký tự thường.
+.data 
+chuoi1: .asciiz "Nhap mot ky tu in hoa: "
+chuoi2: .asciiz "\nKy tu thuong la: "
+chuoi3: .asciiz "\nKy tu da nhap da la ky tu thuong roi.\n"
+chuoi4: .asciiz "\nKy tu da nhap khong phai la chu cai.\n"
+.text 
+.globl main
+main:
+#--------------Nhập ký tự
+#Xuất chuỗi 1
+li $v0,  4
+la $a0, chuoi1
+syscall
+#Nhập ký tự
+li $v0,  12
+syscall
+#Lưu dữ liệu
+move $s0, $v0
+#--------------Xét xem ký tự đã nhập có hợp lệ không
+#Kiểm tra xem ký tự đã nhập có phải ký tự in hoa không
+sge $t0, $s0, 65
+sle $t1, $s0, 90
+bne $t0, $t1, TH1 #nếu ko thỏa dk trên thì chuyển xuống TH1
+#nếu thỏa thì gán s0 = s0 + 32
+add $s0, $s0, 32
+#Xuất chuỗi 2
+li $v0, 4
+la $a0, chuoi2
+syscall
+#Xuất ký tự thường
+move $a0, $s0
+li $v0,  11
+syscall
+
+j Xuly
+#TH1: Ký tự đã nhập đã là ký tự thường
+TH1: 
+sge $t0, $s0, 97
+sle $t1, $s0, 122
+bne $t0, $t1, TH2 #Nếu ký tự đã nhập không phải chữ hoa, 
+#không phải chữ thường thì chuyển tiếp qua TH2
+#Nếu ĐK trên đúng thì xuất chuỗi 3
+li $v0, 4
+la $a0, chuoi3
+syscall
+
+j Xuly
+TH2: #Xuất chuỗi 4
+li $v0, 4
+la $a0, chuoi4
+syscall
+
+Xuly:
+li $v0, 10 #Thoát
+syscall
+
+exit:

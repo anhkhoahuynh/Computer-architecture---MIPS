@@ -1,0 +1,76 @@
+#Bài 7: Nhập một mảng các số nguyên n phần tử, xuất mảng đó ra
+# màn hình.
+.data
+mang:.space 10000    
+dauphay: .asciiz ", "
+dauhaicham: .asciiz ": "
+chuoi1:.asciiz "Nhap so phan tu cua chuoi: "
+chuoi2: .asciiz "Nhap phan tu thu "
+chuoi3:.asciiz "Chuoi da nhap la: "
+.text  main
+main:  
+li $v0,4
+la $a0,chuoi1
+syscall
+li $v0,5
+syscall
+#Vì dạng byte chỉ có thể cộng cho 4 nên phải nhân độ dài chuỗi với 4
+move $s0, $v0
+move $s1, $zero
+add $s1, $s1, 4
+mult $s0, $s1
+mflo $s0
+jal nhap
+li $v0,10
+syscall
+
+nhap:
+move $t1, $zero
+add $t1, $t1, 4
+bge $t0, $s0, trave0 #Nếu điều kiện này đúng, chuyển qua
+#return số chạy i=0 trước khi vào vòng lặp xuất
+#Nếu đk trên sai, tiếp tục nhập liệu
+#Xuất chuỗi báo nhập phần tử thứ    
+li $v0, 4
+la $a0,chuoi2
+syscall
+#Xuất chỉ số của phần tử thứ i
+div $t0, $t1
+mflo $t2
+move $a0,$t2
+li $v0, 1
+syscall
+#Xuất dấu 2 chấm    
+li $v0, 4
+la $a0, dauhaicham
+syscall
+#Nhập phần tử thứ i
+li $v0, 5
+syscall
+#Chuyển phần tử thứ i vào mảng
+sw $v0, mang($t0)
+#Cộng số chạy i
+add $t0, $t0, 4
+j nhap
+
+trave0:
+#Xuất chuỗi báo kết quả:  
+li $v0, 4
+la $a0,chuoi3
+syscall
+move $t0, $zero
+#Chuyển qua xuất
+beq  $t0, $zero ,xuat
+
+xuat:
+bge $t0, $s0, exit
+lw $a0, mang($t0)
+li $v0, 1
+syscall
+li $v0, 4
+la $a0,dauphay
+syscall
+add $t0,$t0,4
+j xuat
+
+exit:

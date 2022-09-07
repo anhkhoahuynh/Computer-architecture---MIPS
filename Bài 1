@@ -1,0 +1,26 @@
+#Bài 1: Nhập vào một chuỗi, xuất lại chuỗi đó ra màn hình (echo).
+.data 
+chuoi1: .asciiz "Nhap moi chuoi: "
+chuoitrong: .space 1000
+chuoi2: .asciiz "Chuoi da nhap: "
+.text 
+.globl main
+main: 
+# Xuất chuỗi 1
+li $v0,  4
+la $a0, chuoi1
+syscall
+#Nhập chuỗi
+li $v0,  8
+la $a0, chuoitrong 
+la $a1, 1000
+syscall
+#Xuất chuỗi 2
+li $v0,  4
+la $a0, chuoi2
+syscall
+#Xuất chuỗi đã nhập
+li $v0,  4
+la $a0, chuoitrong
+syscall
+exit:

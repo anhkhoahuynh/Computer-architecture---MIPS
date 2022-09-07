@@ -1,0 +1,60 @@
+#Bài 8: Nhập vào một số nguyên n, tính tổng từ 1 đến n.
+.data
+mang:.space 10000    
+dauphay: .asciiz ", "
+dauhaicham: .asciiz ": "
+chuoi1:.asciiz "Nhap mot so: "
+chuoi2:.asciiz "Tong tu 1 den "
+chuoi3:.asciiz " la: "
+.text  main
+main:  
+li $v0,4
+la $a0,chuoi1
+syscall
+#Nhập số n
+li $v0, 5
+syscall
+#Vì dạng byte chỉ có thể cộng cho 4 nên phải nhân độ dài chuỗi với 4
+move $s0, $v0
+move $s1, $zero
+add $s1, $s1, 4
+mult $s0, $s1
+mflo $s0
+move $s2, $zero
+jal tinhtong
+li $v0, 10
+syscall
+
+tinhtong:
+#Gán tổng s2=0
+bgt  $t0, $s0, xuat #Nếu điều kiện này đúng, chuyển qua
+#return số chạy i=0 trước khi vào vòng lặp xuất
+#Nếu đk trên sai, tiếp tục tính 
+#Phải chia 4 trước khi cộng vào
+move $t1, $zero
+add $t1,$t1,4
+div $t0, $t1
+mflo $t2
+#tính tổng
+add $s2, $s2, $t2
+add $t0, $t0, 4
+j tinhtong
+
+xuat:
+li $v0, 4
+la $a0,chuoi2
+syscall
+move $t2, $zero
+add $t2, $t2, 4
+div $s0, $t2
+mflo $s0
+move $a0,$s0
+li $v0, 1
+syscall
+li $v0, 4
+la $a0,chuoi3
+syscall
+move $a0, $s2
+li $v0, 1
+syscall
+exit:

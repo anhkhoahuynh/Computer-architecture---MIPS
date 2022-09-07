@@ -1,0 +1,38 @@
+#Bài 2: Nhập vào một ký tự, xuất ra ký tự liền trước và liền sau.
+.data 
+chuoi1: .asciiz "Nhap mot ky tu: "
+chuoi2: .asciiz "\nKy tu lien truoc: "
+chuoi3: .asciiz "\nKy tu lien sau: "
+.text 
+.globl main
+main:
+#Xuất chuỗi 1
+li $v0,  4
+la $a0, chuoi1
+syscall
+#Nhập ký tự
+li $v0,  12
+syscall
+#Lưu dữ liệu
+move $s0, $v0
+add $t0, $s0, -1
+add $t1, $s0, 1
+#In ra màn hình chuỗi 2
+li $v0,  4
+la $a0, chuoi2
+syscall
+#In ra màn ký tự trước
+move $a0, $t0
+li $v0,  11
+syscall
+#In ra màn hình chuỗi 3
+li $v0,  4
+la $a0, chuoi3
+syscall
+#In ra màn ký tự sau
+move $a0, $t1
+li $v0,  11
+syscall
+
+
+exit:

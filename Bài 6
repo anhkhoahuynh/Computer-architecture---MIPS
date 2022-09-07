@@ -1,0 +1,100 @@
+#Nhập một ký tự từ bàn phím. Nếu ký tự vừa nhập thuộc [0-9], 
+#[a-z], [A-Z] thì xuất ra màn hình ký tự đó và loại của ký tự đó 
+#(số, chữ thường, chữ hoa).
+.data 
+chuoi1: .asciiz "Nhap vao mot ky tu: "
+chuoi2: .asciiz "\nKy tu vua nhap khong phai la so, chu thuong, chu hoa."
+chuoi3: .asciiz "\nKy tu vua nhap: "
+so: .asciiz " la so."
+chuthuong: .asciiz " la chu thuong."
+chuhoa: .asciiz " la chu hoa."
+.text 
+.globl main
+main:
+#--------------Nhập ký tự
+#Xuất chuỗi 1
+li $v0,  4
+la $a0, chuoi1
+syscall
+#Nhập ký tự
+li $v0,  12
+syscall
+#Lưu dữ liệu
+move $s0, $v0
+#--------------Xét xem ký tự đã nhập có hợp lệ không
+#Kiểm tra xem ký tự đã nhập có phải ký tự in hoa không
+sge $t0, $s0, 65
+sle $t1, $s0, 90
+bne $t0, $t1, TH1 #nếu ko thỏa dk trên thì chuyển xuống TH1
+#nếu thỏa thì là ký tự in hoa. In ra màn hình:
+li $v0, 4
+la $a0, chuoi3
+syscall
+#Xuất ký tự đã nhập
+move $a0, $s0
+li $v0,  11
+syscall
+#Xuất câu kết luận là chữ in hoa
+li $v0, 4
+la $a0, chuhoa
+syscall
+
+
+#Kiểm tra xem ký tự đã nhập có phải ký tự thường không
+
+
+#Kiểm tra xem ký tự đã nhập có phải ký tự thường không
+sge $t0, $s0, 48
+sle $t1, $s0, 57	
+bne $t0, $t1, TH3
+
+
+j Xuly
+#TH1: Kiểm tra xem ký tự đã nhập có phải chữ thường không
+TH1: 
+sge $t0, $s0, 97
+sle $t1, $s0, 122
+bne $t0, $t1, TH2 #Nếu ký tự đã nhập không phải chữ thường, 
+#thì chuyển tiếp qua TH2
+#Nếu thỏa thì xuất ra màn hình
+li $v0, 4
+la $a0, chuoi3
+syscall
+#Xuất ký tự đã nhập
+move $a0, $s0
+li $v0,  11
+syscall
+#Xuất câu kết luận là chữ in hoa
+li $v0, 4
+la $a0, chuthuong
+syscall
+
+j Xuly
+TH2: #Kiểm tra xem ký tự đã nhập có phải số không
+sge $t0, $s0, 48
+sle $t1, $s0, 57	
+bne $t0, $t1, TH3 #Nếu ký tự đã nhập không phải số, 
+#thì chuyển tiếp qua TH3
+#Nếu thỏa thì xuất ra màn hình
+li $v0, 4
+la $a0, chuoi3
+syscall
+#Xuất ký tự đã nhập
+move $a0, $s0
+li $v0,  11
+syscall
+#Xuất câu kết luận là chữ in hoa
+li $v0, 4
+la $a0, so
+syscall
+
+j Xuly
+TH3: li $v0, 4 #Ko phải 3 loại trên thì xuất kết luận
+la $a0, chuoi2
+syscall
+
+Xuly:
+li $v0, 10 #Thoát
+syscall
+
+exit:

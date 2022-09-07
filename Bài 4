@@ -1,0 +1,72 @@
+#Bài 4: Nhập từ bàn phím 2 số nguyên, tính tổng, hiệu, tích, thương của 2 số.
+.data 
+chuoi1: .asciiz "Nhap so thu nhat: "
+chuoi2: .asciiz "Nhap so thu hai: "
+chuoi3: .asciiz "Tong: "
+chuoi4: .asciiz "\nHieu: "
+chuoi5: .asciiz "\nTich: "
+chuoi6: .asciiz "\nThuong: "
+chuoi7: .asciiz ", so du: "
+.text 
+.globl main
+main:
+#--------------Nhập 2 số
+li $v0, 4
+la $a0, chuoi1 #Xuất chuỗi 1
+syscall
+li $v0, 5 #Nhập số thứ nhất
+syscall
+move $s0, $v0 #Lưu số thứ nhất
+li $v0, 4
+la $a0, chuoi2 #Xuất chuỗi 2
+syscall
+li $v0, 5 #Nhập số thứ hai
+syscall
+move $s1, $v0 #Lưu số thứ hai
+
+#--------------Cộng trừ nhân chia
+add $t1, $s0, $s1
+sub $t2, $s0, $s1
+mulo  $t3,$s0, $s1
+div $s0, $s1
+mflo $t4
+mfhi $t5
+
+#div  $t4, $s0, $s1
+
+#--------------Xuất kết quả ra màn hình
+#Xuất tổng
+li $v0,  4
+la $a0, chuoi3#Xuất chuỗi 3
+syscall
+move $a0,$t1
+li $v0,  1
+syscall
+#Xuất hiệu
+li $v0,  4
+la $a0, chuoi4#Xuất chuỗi 4
+syscall
+move $a0,$t2
+li $v0,  1
+syscall
+#Xuất tích
+li $v0,  4
+la $a0, chuoi5#Xuất chuỗi 5
+syscall
+move $a0, $t3
+li $v0,  1
+syscall
+#Xuất thương
+li $v0,  4
+la $a0, chuoi6#Xuất chuỗi 6
+syscall
+move $a0, $t4
+li $v0,  1#Xuất thương
+syscall
+li $v0,  4
+la $a0, chuoi7#Xuất chuỗi 7
+syscall
+move $a0, $t5
+li $v0,  1#Xuất chuỗi 7
+syscall
+exit:

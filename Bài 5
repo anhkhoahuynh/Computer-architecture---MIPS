@@ -1,0 +1,58 @@
+#Bài 4: Nhập vào 2 số nguyên, xuất ra phép so sánh giữa 2 số.
+.data 
+chuoi1: .asciiz "Nhap so thu nhat: "
+chuoi2: .asciiz "Nhap so thu hai: "
+chuoi3: .asciiz "So lon hon la: "
+chuoi4: .asciiz "Hai so bang nhau."
+.text 
+.globl main
+main:
+#--------------Nhập 2 số
+li $v0, 4
+la $a0, chuoi1 #Xuất chuỗi 1
+syscall
+li $v0, 5 #Nhập số thứ nhất
+syscall
+move $s0, $v0 #Lưu số thứ nhất
+li $v0, 4
+la $a0, chuoi2 #Xuất chuỗi 2
+syscall
+li $v0, 5 #Nhập số thứ hai
+syscall
+move $s1, $v0 #Lưu số thứ hai
+
+#--------------Kiểm tra số nào lớn hơn hay bằng nhau
+#Tính hiệu
+sub $t0, $s0 , $s1
+beqz $t0, TH1 #Nếu hiệu bằng 0 thì xuống TH1
+bgt $t0, $zero, TH2 #Nếu hiệu lớn hơn 0 thì xuống TH2
+blt $t0, $zero, TH3 #Nếu hiệu nhỏ hơn 0 thì xuống TH3
+
+j Xuly
+TH1:  
+li $v0,  4
+la $a0, chuoi4 #Xuất chuỗi 4
+syscall
+
+j Xuly
+TH2:
+li $v0,  4
+la $a0, chuoi3 #Xuất chuỗi 3
+syscall
+move $a0, $s0
+li $v0,  1#Xuất số thứ nhất
+syscall
+
+j Xuly
+TH3:
+li $v0,  4
+la $a0, chuoi3 #Xuất chuỗi 3
+syscall
+move $a0, $s1
+li $v0,  1#Xuất số thứ hai
+syscall
+
+Xuly:
+li $v0, 10 #Thoát
+syscall
+exit:
